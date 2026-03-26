@@ -35,7 +35,7 @@ export async function POST(req: Request) {
           console.log('[WEBHOOK] Processing subscription for user:', session.metadata.user_id);
           const sub = await stripe.subscriptions.retrieve(session.subscription as string)
           
-          const plan = session.amount_total === 5000 ? 'monthly' : 'yearly';
+          const plan = session.amount_total === 1000 ? 'monthly' : 'yearly';
           console.log('[WEBHOOK] Calculated plan:', plan, 'Amount:', session.amount_total);
           
           const { error } = await supabaseAdmin
