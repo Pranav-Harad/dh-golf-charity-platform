@@ -32,10 +32,13 @@ export default async function AdminWinnersPage() {
             {winners?.map((win) => (
               <tr key={win.id} className="hover:bg-zinc-800/20 transition">
                 <td className="px-6 py-4">
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                   <div className="text-white font-medium">{(win.users as any)?.full_name}</div>
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                   <div className="text-xs">{(win.users as any)?.email}</div>
                 </td>
                 <td className="px-6 py-4">
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                   <div className="text-white">{(win.draws as any)?.month}</div>
                   <div className="text-xs uppercase bg-zinc-800 px-2 py-0.5 rounded inline-block mt-1">
                     {win.match_type.replace('_',' ')}

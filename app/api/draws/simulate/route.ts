@@ -94,6 +94,7 @@ export async function POST(req: Request) {
     })
 
     const drawSet = new Set(draw_numbers)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const winnersToInsert: any[] = []
 
     let matched5 = 0, matched4 = 0, matched3 = 0
@@ -138,6 +139,7 @@ export async function POST(req: Request) {
       draw,
       stats: { totalPool, newPool, rolledOver, matched5, matched4, matched3 }
     })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }

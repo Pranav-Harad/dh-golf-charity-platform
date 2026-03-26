@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
-export async function GET(req: Request) {
+export async function GET() {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -50,6 +50,7 @@ export async function POST(req: Request) {
     if (error) throw error
 
     return NextResponse.json({ score: newScore })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }

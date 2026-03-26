@@ -74,7 +74,7 @@ export default async function AdminDashboardPage() {
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-white">Recent Draws</h2>
-            <button className="text-sm px-4 py-2 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 transition">Run New Simulation</button>
+            <button type="button" className="text-sm px-4 py-2 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 transition">Run New Simulation</button>
           </div>
           
           <div className="space-y-4">
@@ -98,11 +98,13 @@ export default async function AdminDashboardPage() {
           
           <div className="space-y-4 flex-1">
             {winners?.slice(0, 5).map(win => (
-               <div key={win.id} className="flex items-center justify-between p-4 bg-black/40 border border-zinc-800/50 rounded-xl">
-                 <div>
-                   <div className="text-white font-medium text-sm">{(win.users as any)?.full_name || 'Unknown'}</div>
-                   <div className="text-xs text-zinc-500 capitalize">{(win.draws as any)?.month} • {win.match_type.replace('_',' ')}</div>
-                 </div>
+                <div key={win.id} className="flex items-center justify-between p-4 bg-black/40 border border-zinc-800/50 rounded-xl">
+                  <div>
+                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                    <div className="text-white font-medium text-sm">{(win.users as any)?.full_name || 'Unknown'}</div>
+                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                    <div className="text-xs text-zinc-500 capitalize">{(win.draws as any)?.month} • {win.match_type.replace('_',' ')}</div>
+                  </div>
                  <div className="text-right">
                    <div className="text-emerald-400 font-semibold">${win.prize_amount.toFixed(2)}</div>
                    <div className={`text-xs capitalize ${win.payout_status === 'pending' ? 'text-yellow-500' : 'text-zinc-500'}`}>{win.verification_status} / {win.payout_status}</div>
@@ -113,7 +115,7 @@ export default async function AdminDashboardPage() {
               <div className="text-center py-12 text-zinc-500">No winners found.</div>
             )}
           </div>
-          <button className="mt-6 w-full py-3 bg-zinc-800 text-white rounded-xl text-sm font-medium hover:bg-zinc-700 transition">
+          <button type="button" className="mt-6 w-full py-3 bg-zinc-800 text-white rounded-xl text-sm font-medium hover:bg-zinc-700 transition">
             View All Winners & Process Payouts
           </button>
         </div>

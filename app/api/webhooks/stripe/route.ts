@@ -15,6 +15,7 @@ export async function POST(req: Request) {
       signature,
       process.env.STRIPE_WEBHOOK_SECRET!
     )
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error('Webhook Error:', error.message)
     return new Response(`Webhook Error: ${error.message}`, { status: 400 })
@@ -42,6 +43,7 @@ export async function POST(req: Request) {
             .update({
               subscription_status: 'active',
               subscription_plan: plan,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               subscription_renewal_date: new Date((sub as any).current_period_end * 1000).toISOString(),
             })
             .eq('id', session.metadata.user_id)
@@ -57,7 +59,9 @@ export async function POST(req: Request) {
         break
       case 'invoice.payment_succeeded':
         // Handle renewal
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         if ((invoice as any).subscription) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const sub = await stripe.subscriptions.retrieve((invoice as any).subscription as string)
           const userId = sub.metadata.user_id
           if (userId) {
@@ -65,6 +69,7 @@ export async function POST(req: Request) {
               .from('users')
               .update({
                 subscription_status: 'active',
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 subscription_renewal_date: new Date((sub as any).current_period_end * 1000).toISOString(),
               })
               .eq('id', userId)
@@ -73,6 +78,7 @@ export async function POST(req: Request) {
         break
       case 'invoice.payment_failed':
       case 'customer.subscription.deleted':
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const subId = event.type === 'invoice.payment_failed' ? (invoice as any).subscription : subscription.id
         if (subId) {
           const sub = await stripe.subscriptions.retrieve(subId as string)
@@ -88,6 +94,7 @@ export async function POST(req: Request) {
         }
         break
     }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     console.error('DB Update Error:', err)
     return new Response('Webhook handle error', { status: 500 })

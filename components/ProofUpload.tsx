@@ -31,7 +31,8 @@ export default function ProofUpload({ winnerId, userId }: { winnerId: string, us
 
       await updateWinnerProof(winnerId, publicUrl)
       setSuccess(true)
-    } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       const err = error as Error
       console.error('Error uploading proof:', err.message)
       alert('Error uploading proof!')

@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { CheckCircle2, AlertCircle, TrendingUp, Trophy, ArrowRight, Wallet } from 'lucide-react'
+import { CheckCircle2, AlertCircle, TrendingUp, Trophy, ArrowRight } from 'lucide-react'
 import ScoreEntryForm from '@/components/ScoreEntryForm'
 import ProofUpload from '@/components/ProofUpload'
 import { redirect } from 'next/navigation'
@@ -101,12 +101,16 @@ export default async function DashboardPage() {
             <h3 className="text-lg font-semibold text-white mb-6">Your Charity</h3>
             {myCharity?.charities ? (
               (() => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const c = Array.isArray(myCharity.charities) ? myCharity.charities[0] : (myCharity.charities as any);
                 return (
                   <div>
                     <div className="flex items-center gap-4 mb-6">
                       {c?.image_url ? (
-                        <img src={c.image_url} alt="Charity" className="w-16 h-16 rounded-lg object-cover bg-zinc-800" />
+                        <>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={c.image_url} alt="Charity" className="w-16 h-16 rounded-lg object-cover bg-zinc-800" />
+                        </>
                       ) : (
                         <div className="w-16 h-16 rounded-lg bg-zinc-800 flex items-center justify-center text-zinc-600">Logo</div>
                       )}
@@ -155,6 +159,7 @@ export default async function DashboardPage() {
                   <div key={win.id} className="flex flex-col gap-3 text-sm bg-black/20 p-3 rounded-lg border border-zinc-800/50">
                     <div className="flex items-center justify-between">
                       <div>
+                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                         <span className="text-white font-medium block">{(win.draws as any)?.month || 'Draw'}</span>
                         <span className="text-xs text-zinc-500 inline-block mt-0.5 px-2 py-0.5 bg-zinc-800 rounded">{win.match_type.replace('_', ' ')}</span>
                       </div>

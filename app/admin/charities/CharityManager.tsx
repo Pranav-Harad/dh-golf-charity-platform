@@ -4,10 +4,13 @@ import { useState } from 'react'
 import { saveCharity, deleteCharity } from '@/app/admin/actions'
 import { Plus, Edit2, Trash2, X } from 'lucide-react'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function CharityManager({ initialCharities }: { initialCharities: any[] }) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [editing, setEditing] = useState<any | null>(null)
   const [isAdding, setIsAdding] = useState(false)
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (c: any) => {
     setEditing(c)
     setIsAdding(false)
@@ -30,7 +33,10 @@ export default function CharityManager({ initialCharities }: { initialCharities:
            <div key={c.id} className="bg-zinc-900 border border-zinc-800 p-4 rounded-xl flex items-start justify-between">
              <div className="flex items-start gap-4">
                {c.image_url ? (
-                 <img src={c.image_url} alt={c.name} className="w-12 h-12 rounded object-cover bg-zinc-800" />
+                 <>
+                   {/* eslint-disable-next-line @next/next/no-img-element */}
+                   <img src={c.image_url} alt={c.name} className="w-12 h-12 rounded object-cover bg-zinc-800" />
+                 </>
                ) : (
                  <div className="w-12 h-12 rounded bg-zinc-800 flex items-center justify-center text-xs text-zinc-600">Logo</div>
                )}
@@ -106,6 +112,7 @@ export default function CharityManager({ initialCharities }: { initialCharities:
   )
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function Target(props: any) {
   return (
     <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>

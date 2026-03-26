@@ -45,6 +45,7 @@ export async function POST(req: Request) {
     })
 
     return NextResponse.json({ url: session.url })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error('[STRIPE_CHECKOUT]', error)
     return new NextResponse('Internal Error', { status: 500 })

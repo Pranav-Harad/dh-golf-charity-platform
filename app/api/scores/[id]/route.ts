@@ -30,6 +30,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     if (error) throw error
 
     return NextResponse.json({ score: updatedScore })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }

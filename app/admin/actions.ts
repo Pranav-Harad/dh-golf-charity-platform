@@ -15,6 +15,7 @@ export async function verifyWinner(id: string, status: 'approved' | 'rejected') 
   if (status === 'approved') {
     const { data: win } = await supabaseAdmin.from('winners').select('*, users(full_name, email), draws(month)').eq('id', id).single()
     if (win) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await sendWinnerAlert((win.users as any).email, (win.users as any).full_name, (win.draws as any).month, win.prize_amount, 'approved')
     }
   }
@@ -33,6 +34,7 @@ export async function processPayout(id: string) {
 
   const { data: win } = await supabaseAdmin.from('winners').select('*, users(full_name, email), draws(month)').eq('id', id).single()
   if (win) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await sendWinnerAlert((win.users as any).email, (win.users as any).full_name, (win.draws as any).month, win.prize_amount, 'paid')
   }
 

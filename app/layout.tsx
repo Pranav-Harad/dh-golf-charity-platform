@@ -1,10 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import { LogOut, Home, User as UserIcon } from 'lucide-react'
-import { logout } from '@/app/login/actions'
 import GlobalNav from '@/components/GlobalNav'
 import MainLayoutWrapper from '@/components/MainLayoutWrapper'
 
@@ -27,7 +24,7 @@ export default async function RootLayout({
       const { data } = await supabase.auth.getUser()
       user = data.user
     }
-  } catch (e) {
+  } catch {
     console.warn('Supabase not configured, skipping auth check for preview')
   }
 
