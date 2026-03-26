@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { getURL } from '@/lib/utils'
 import { NextResponse } from 'next/server'
 
 export async function GET(request: Request) {
@@ -11,10 +12,12 @@ export async function GET(request: Request) {
     const supabase = createClient()
     const { error } = await supabase.auth.exchangeCodeForSession(code)
     if (!error) {
-      return NextResponse.redirect(`${origin}${next}`)
+      const url = getURL()
+      return NextResponse.redirect(`${url}${next.startsWith('/') ? next.substring(1) : next}`)
     }
   }
 
   // return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/login?error=Could not authenticate user`)
+  const url = getURL()
+  return NextResponse.redirect(`${url}login?error=Could not authenticate user`)
 }

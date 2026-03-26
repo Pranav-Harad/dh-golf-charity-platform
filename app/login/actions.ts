@@ -31,7 +31,7 @@ export async function signup(formData: FormData) {
   const contributionPercent = formData.get('charity_contribution_percent') as string | null
 
   const supabase = createClient()
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -46,6 +46,13 @@ export async function signup(formData: FormData) {
 
   if (error) {
     return { error: error.message }
+  }
+
+  if (data.user && !data.session) {
+    return { 
+      success: true, 
+      message: 'Verification email sent! Please check your inbox to confirm your account.' 
+    }
   }
 
   revalidatePath('/', 'layout')
