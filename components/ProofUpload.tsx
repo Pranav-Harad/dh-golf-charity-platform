@@ -19,7 +19,7 @@ export default function ProofUpload({ winnerId, userId }: { winnerId: string, us
       const fileExt = file.name.split('.').pop()
       const fileName = `${userId}/${winnerId}-${Math.random()}.${fileExt}`
 
-      const { error: uploadError, data } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from('winner-proofs')
         .upload(fileName, file)
 
@@ -32,7 +32,8 @@ export default function ProofUpload({ winnerId, userId }: { winnerId: string, us
       await updateWinnerProof(winnerId, publicUrl)
       setSuccess(true)
     } catch (error: any) {
-      console.error('Error uploading proof:', error.message)
+      const err = error as Error
+      console.error('Error uploading proof:', err.message)
       alert('Error uploading proof!')
     } finally {
       setUploading(false)

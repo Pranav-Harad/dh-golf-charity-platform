@@ -58,8 +58,9 @@ export default function ScoreEntryForm({ initialScores = [], onScoreAdded }: Sco
       else window.location.reload()
 
       setNewScore('')
-    } catch (err: any) {
-      setFormError(err.message)
+    } catch (err) {
+      const error = err as Error
+      setFormError(error.message)
     } finally {
       setLoading(false)
     }
@@ -89,7 +90,7 @@ export default function ScoreEntryForm({ initialScores = [], onScoreAdded }: Sco
 
       setScores(prev => prev.map(sc => sc.id === id ? { ...sc, score: s, score_date: editDateVal } : sc))
       setEditingId(null)
-    } catch (err) {
+    } catch (_err) {
       alert('Error updating score')
     } finally {
       setLoading(false)
