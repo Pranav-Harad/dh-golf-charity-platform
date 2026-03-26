@@ -48,12 +48,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <Link href="/admin/charities" className="flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition cursor-pointer">
             <Target className="w-5 h-5" /> Charities
           </Link>
-          <div className="flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition cursor-pointer">
-            <Users className="w-5 h-5" /> Users (Coming Soon)
-          </div>
-          <div className="flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition cursor-pointer">
+          <Link href="/admin/users" className="flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition cursor-pointer">
+            <Users className="w-5 h-5" /> Users
+          </Link>
+          <Link href="/admin/settings" className="flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition cursor-pointer">
             <Settings className="w-5 h-5" /> Settings
-          </div>
+          </Link>
         </nav>
         
         <div className="p-4 border-t border-zinc-800">
