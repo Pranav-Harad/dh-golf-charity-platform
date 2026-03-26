@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import AdminSimulationManager, { PublishButton } from '@/components/AdminSimulationManager'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { Users, DollarSign, Target, Trophy } from 'lucide-react'
 
@@ -20,16 +22,19 @@ export default async function AdminDashboardPage() {
     supabaseAdmin.from('winners').select('*, users(full_name, email), draws(month)').order('created_at', { ascending: false })
   ])
 
-  const totalPrizePools = prizePools?.reduce((acc, p) => acc + p.total_pool, 0) || 0
-  const totalWinningsPending = winners?.filter(w => w.payout_status === 'pending').reduce((acc, w) => acc + w.prize_amount, 0) || 0
+  const totalPrizePools = prizePools?.reduce((acc: any, p: any) => acc + p.total_pool, 0) || 0
+  const totalWinningsPending = winners?.filter((w: any) => w.payout_status === 'pending').reduce((acc: any, w: any) => acc + w.prize_amount, 0) || 0
   
   return (
     <div className="space-y-10">
       
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-white mb-2">Platform Overview</h1>
-        <p className="text-zinc-400">Manage draws, charities, users, and review key metrics.</p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-white mb-2">Platform Overview</h1>
+          <p className="text-zinc-400">Manage draws, charities, users, and review key metrics.</p>
+        </div>
+        <AdminSimulationManager />
       </div>
 
       {/* Analytics KPIs */}
@@ -74,18 +79,27 @@ export default async function AdminDashboardPage() {
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-white">Recent Draws</h2>
-            <button type="button" className="text-sm px-4 py-2 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 transition">Run New Simulation</button>
           </div>
           
           <div className="space-y-4">
-            {draws?.slice(0, 5).map(draw => (
+            {draws?.slice(0, 5).map((draw: any) => (
               <div key={draw.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-black/40 border border-zinc-800/50 rounded-xl">
                 <div>
-                  <div className="text-white font-medium">{draw.month}</div>
-                  <div className="text-xs text-zinc-500 capitalize">{draw.draw_type} • {draw.status}</div>
+                  <div className="text-white font-medium flex items-center gap-2">
+                    {draw.month}
+                    {draw.status === 'simulation' && (
+                      <span className="px-2 py-0.5 bg-yellow-500/10 text-yellow-500 text-[10px] font-bold uppercase rounded border border-yellow-500/20">Draft</span>
+                    )}
+                  </div>
+                  <div className="text-xs text-zinc-500 capitalize">{draw.draw_type}</div>
                 </div>
-                <div className="mt-3 sm:mt-0 flex items-center gap-2 text-sm font-mono text-emerald-400">
-                  {draw.draw_numbers.join(' - ')}
+                <div className="mt-3 sm:mt-0 flex items-center gap-4">
+                  <div className="text-sm font-mono text-emerald-400">
+                    {draw.draw_numbers.join(' - ')}
+                  </div>
+                  {draw.status === 'simulation' && (
+                    <PublishButton drawId={draw.id} month={draw.month} />
+                  )}
                 </div>
               </div>
             ))}
@@ -97,7 +111,7 @@ export default async function AdminDashboardPage() {
           <h2 className="text-xl font-semibold text-white mb-6">Recent Winners</h2>
           
           <div className="space-y-4 flex-1">
-            {winners?.slice(0, 5).map(win => (
+            {winners?.slice(0, 5).map((win: any) => (
                 <div key={win.id} className="flex items-center justify-between p-4 bg-black/40 border border-zinc-800/50 rounded-xl">
                   <div>
                     {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}

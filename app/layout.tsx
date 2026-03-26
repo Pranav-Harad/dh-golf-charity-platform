@@ -4,6 +4,7 @@ import './globals.css'
 import { createClient } from '@/lib/supabase/server'
 import GlobalNav from '@/components/GlobalNav'
 import MainLayoutWrapper from '@/components/MainLayoutWrapper'
+import { Toaster } from 'sonner'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -36,6 +37,7 @@ export default async function RootLayout({
         <MainLayoutWrapper>
           {children}
         </MainLayoutWrapper>
+        <Toaster position="top-right" theme="dark" richColors />
 
         <footer className="border-t border-zinc-900 bg-black py-12 text-center text-zinc-600 text-sm mt-auto">
           <div className="max-w-7xl mx-auto px-6">
