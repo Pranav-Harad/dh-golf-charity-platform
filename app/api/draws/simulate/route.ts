@@ -107,21 +107,42 @@ export async function POST(req: Request) {
 
       if (matches === 5) {
         matched5++
-        winnersToInsert.push({ user_id: userId, draw_id: draw.id, match_type: '5_match', verification_status: 'pending' })
+        winnersToInsert.push({ user_id: userId, draw_id: draw.id, match_type: '5_match', verification_status: 'pending', prize_amount: 0 })
       } else if (matches === 4) {
         matched4++
-        winnersToInsert.push({ user_id: userId, draw_id: draw.id, match_type: '4_match', verification_status: 'approved' }) // Auto approve lower tiers
+        winnersToInsert.push({ user_id: userId, draw_id: draw.id, match_type: '4_match', verification_status: 'approved', prize_amount: 0 })
       } else if (matches === 3) {
         matched3++
-        winnersToInsert.push({ user_id: userId, draw_id: draw.id, match_type: '3_match', verification_status: 'approved' })
+        winnersToInsert.push({ user_id: userId, draw_id: draw.id, match_type: '3_match', verification_status: 'approved', prize_amount: 0 })
       }
     })
 
+    // --- FALLBACK: Guaranteed Winner Logic ---
+    // If no traditional winners (3+ matches) were found, pick a "Raffle Winner" from all active subscribers
+    if (winnersToInsert.length === 0) {
+      const { data: activeUsers } = await supabaseAdmin
+        .from('users')
+        .select('id')
+        .eq('subscription_status', 'active')
+
+      if (activeUsers && activeUsers.length > 0) {
+        const randomWinner = activeUsers[Math.floor(Math.random() * activeUsers.length)]
+        matched3 = 1 // Treat as a 3-match win
+        winnersToInsert.push({ 
+          user_id: randomWinner.id, 
+          draw_id: draw.id, 
+          match_type: '3_match', 
+          verification_status: 'approved', 
+          prize_amount: 0 
+        })
+      }
+    }
+
     // Assign prize amounts inside winnersToInsert
     winnersToInsert.forEach(w => {
-      if (w.match_type === '5_match') w.prize_amount = fiveMatchPool / matched5
-      if (w.match_type === '4_match') w.prize_amount = fourMatchPool / matched4
-      if (w.match_type === '3_match') w.prize_amount = threeMatchPool / matched3
+      if (w.match_type === '5_match') w.prize_amount = fiveMatchPool / (matched5 || 1)
+      if (w.match_type === '4_match') w.prize_amount = fourMatchPool / (matched4 || 1)
+      if (w.match_type === '3_match') w.prize_amount = threeMatchPool / (matched3 || 1)
     })
 
     if (winnersToInsert.length > 0) {
@@ -137,7 +158,7 @@ export async function POST(req: Request) {
     return NextResponse.json({
       success: true,
       draw,
-      stats: { totalPool, newPool, rolledOver, matched5, matched4, matched3 }
+      stats: { totalPool, newPool, rolledOver, matched5, matched4, matched3, isRaffle: matched5+matched4+matched3 === 1 && winnersToInsert.length === 1 }
     })
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {

@@ -8,6 +8,7 @@ import { toast } from 'sonner'
 
 export default function AdminSimulationManager() {
   const [isSimulating, setIsSimulating] = useState(false)
+  const [drawType, setDrawType] = useState('random')
   const router = useRouter()
 
   const handleSimulate = async () => {
@@ -19,7 +20,7 @@ export default function AdminSimulationManager() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           month, 
-          draw_type: 'algorithmic' 
+          draw_type: drawType 
         })
       })
 
@@ -36,23 +37,34 @@ export default function AdminSimulationManager() {
   }
 
   return (
-    <button
-      onClick={handleSimulate}
-      disabled={isSimulating}
-      className="flex items-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:bg-zinc-800 text-white rounded-lg transition text-sm font-medium shadow-lg shadow-emerald-500/20"
-    >
-      {isSimulating ? (
-        <>
-          <Loader2 className="w-4 h-4 animate-spin" />
-          Simulating...
-        </>
-      ) : (
-        <>
-          <Play className="w-4 h-4" />
-          Run New Simulation
-        </>
-      )}
-    </button>
+    <div className="flex items-center gap-3">
+      <select 
+        value={drawType}
+        onChange={(e) => setDrawType(e.target.value)}
+        className="bg-zinc-900 border border-zinc-800 text-zinc-400 text-sm rounded-lg px-3 py-2 outline-none focus:border-emerald-500 transition"
+      >
+        <option value="random">Random Draw</option>
+        <option value="algorithmic">Algorithmic (Participation Weighted)</option>
+      </select>
+
+      <button
+        onClick={handleSimulate}
+        disabled={isSimulating}
+        className="flex items-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:bg-zinc-800 text-white rounded-lg transition text-sm font-medium shadow-lg shadow-emerald-500/20"
+      >
+        {isSimulating ? (
+          <>
+            <Loader2 className="w-4 h-4 animate-spin" />
+            Simulating...
+          </>
+        ) : (
+          <>
+            <Play className="w-4 h-4" />
+            Run New Simulation
+          </>
+        )}
+      </button>
+    </div>
   )
 }
 

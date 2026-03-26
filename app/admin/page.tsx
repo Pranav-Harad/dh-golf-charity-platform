@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import AdminSimulationManager, { PublishButton } from '@/components/AdminSimulationManager'
 import { supabaseAdmin } from '@/lib/supabase/admin'
-import { Users, DollarSign, Target, Trophy } from 'lucide-react'
+import { Users, DollarSign, Target, Trophy, Heart } from 'lucide-react'
 
 export const revalidate = 0
 
@@ -24,6 +24,15 @@ export default async function AdminDashboardPage() {
 
   const totalPrizePools = prizePools?.reduce((acc: any, p: any) => acc + p.total_pool, 0) || 0
   const totalWinningsPending = winners?.filter((w: any) => w.payout_status === 'pending').reduce((acc: any, w: any) => acc + w.prize_amount, 0) || 0
+  
+  // Calculate Charity Contributions (10% of all confirmed prize winnings)
+  const confirmedWinnings = winners?.filter((w: any) => w.payout_status === 'paid').reduce((acc: any, w: any) => acc + w.prize_amount, 0) || 0
+  const totalCharityContributions = confirmedWinnings * 0.10
+
+  // Match Stats
+  const count5Match = winners?.filter((w: any) => w.match_type === '5_match').length || 0
+  const count4Match = winners?.filter((w: any) => w.match_type === '4_match').length || 0
+  const count3Match = winners?.filter((w: any) => w.match_type === '3_match').length || 0
   
   return (
     <div className="space-y-10">
@@ -64,11 +73,34 @@ export default async function AdminDashboardPage() {
         </div>
 
         <div className="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl">
+          <div className="flex items-center gap-4 text-rose-400 mb-4">
+            <div className="p-3 bg-rose-500/10 rounded-xl"><Heart className="w-6 h-6" /></div>
+            <span className="font-semibold">Charity Collections</span>
+          </div>
+          <div className="text-4xl font-bold text-white">${totalCharityContributions.toFixed(2)}</div>
+        </div>
+
+        <div className="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl">
           <div className="flex items-center gap-4 text-purple-400 mb-4">
             <div className="p-3 bg-purple-500/10 rounded-xl"><Target className="w-6 h-6" /></div>
-            <span className="font-semibold">Total Charities</span>
+            <span className="font-semibold">Match Statistics</span>
           </div>
-          <div className="text-4xl font-bold text-white">{charities?.length || 0}</div>
+          <div className="flex gap-4 items-end">
+            <div>
+              <div className="text-2xl font-bold text-white">{count5Match}</div>
+              <div className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">5 Match</div>
+            </div>
+            <div className="w-px h-8 bg-zinc-800"></div>
+            <div>
+              <div className="text-2xl font-bold text-white">{count4Match}</div>
+              <div className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">4 Match</div>
+            </div>
+            <div className="w-px h-8 bg-zinc-800"></div>
+            <div>
+              <div className="text-2xl font-bold text-white">{count3Match}</div>
+              <div className="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">3 Match</div>
+            </div>
+          </div>
         </div>
       </div>
 
