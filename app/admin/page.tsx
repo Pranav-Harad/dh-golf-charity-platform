@@ -12,7 +12,7 @@ export default async function AdminDashboardPage() {
     { count: activeUsers },
     { data: prizePools },
     { data: draws },
-    { data: charities },
+    { data: _charities },
     { data: winners }
   ] = await Promise.all([
     supabaseAdmin.from('users').select('*', { count: 'exact', head: true }).eq('subscription_status', 'active'),
