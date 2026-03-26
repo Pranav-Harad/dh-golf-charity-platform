@@ -12,13 +12,11 @@ export default async function AdminDashboardPage() {
     { count: activeUsers },
     { data: prizePools },
     { data: draws },
-    { data: _charities },
     { data: winners }
   ] = await Promise.all([
     supabaseAdmin.from('users').select('*', { count: 'exact', head: true }).eq('subscription_status', 'active'),
     supabaseAdmin.from('prize_pools').select('total_pool'),
     supabaseAdmin.from('draws').select('*').order('created_at', { ascending: false }),
-    supabaseAdmin.from('charities').select('*').order('created_at', { ascending: false }),
     supabaseAdmin.from('winners').select('*, users(full_name, email), draws(month)').order('created_at', { ascending: false })
   ])
 
