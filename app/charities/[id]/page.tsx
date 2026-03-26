@@ -42,11 +42,14 @@ export default async function CharityDetailPage({ params }: { params: { id: stri
         <div className="bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden mb-12">
           <div className="h-64 md:h-96 relative bg-zinc-800">
             {charity.image_url ? (
-              <img
-                src={charity.image_url}
-                alt={charity.name}
-                className="w-full h-full object-cover"
-              />
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={charity.image_url}
+                  alt={charity.name}
+                  className="w-full h-full object-cover"
+                />
+              </>
             ) : (
               <div className="w-full h-full flex items-center justify-center text-zinc-600">
                 Image Placeholder

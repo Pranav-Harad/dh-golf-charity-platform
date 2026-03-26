@@ -110,11 +110,14 @@ export default function CharitiesPage() {
                 >
                   <div className="h-48 bg-zinc-800 relative overflow-hidden">
                     {charity.image_url ? (
-                      <img
-                        src={charity.image_url}
-                        alt={charity.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
+                      <>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={charity.image_url}
+                          alt={charity.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                      </>
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-zinc-600 bg-zinc-800">
                         No Image
