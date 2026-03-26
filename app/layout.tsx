@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import { LogOut, Home, User as UserIcon } from 'lucide-react'
 import { logout } from '@/app/login/actions'
 import GlobalNav from '@/components/GlobalNav'
+import MainLayoutWrapper from '@/components/MainLayoutWrapper'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -35,9 +36,9 @@ export default async function RootLayout({
       <body className={`${inter.className} bg-black text-zinc-100 antialiased min-h-screen flex flex-col`}>
         {/* Simple global nav for non-dashboard pages */}
         <GlobalNav user={user} />
-        <div className="flex-1 pt-20">
+        <MainLayoutWrapper>
           {children}
-        </div>
+        </MainLayoutWrapper>
 
         <footer className="border-t border-zinc-900 bg-black py-12 text-center text-zinc-600 text-sm mt-auto">
           <div className="max-w-7xl mx-auto px-6">

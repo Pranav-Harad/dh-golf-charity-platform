@@ -27,16 +27,32 @@ export async function POST(req: Request) {
   try {
     switch (event.type) {
       case 'checkout.session.completed':
+        console.log('[WEBHOOK] checkout.session.completed received!');
+        console.log('[WEBHOOK] Session metadata:', session?.metadata);
+        
         if (session?.metadata?.user_id) {
+          console.log('[WEBHOOK] Processing subscription for user:', session.metadata.user_id);
           const sub = await stripe.subscriptions.retrieve(session.subscription as string)
-          await supabaseAdmin
+          
+          const plan = session.amount_total === 5000 ? 'monthly' : 'yearly';
+          console.log('[WEBHOOK] Calculated plan:', plan, 'Amount:', session.amount_total);
+          
+          const { error } = await supabaseAdmin
             .from('users')
             .update({
               subscription_status: 'active',
-              subscription_plan: session.amount_total === 5000 ? 'monthly' : 'yearly', // Assumes $50/mo or custom value
-              subscription_renewal_date: new Date(sub.current_period_end * 1000).toISOString(),
+              subscription_plan: plan,
+              subscription_renewal_date: new Date((sub as any).current_period_end * 1000).toISOString(),
             })
             .eq('id', session.metadata.user_id)
+            
+          if (error) {
+            console.error('[WEBHOOK] Supabase Update Error:', error);
+          } else {
+            console.log('[WEBHOOK] Database successfully updated to active!');
+          }
+        } else {
+          console.log('[WEBHOOK] No user_id found in metadata');
         }
         break
       case 'invoice.payment_succeeded':
@@ -49,7 +65,7 @@ export async function POST(req: Request) {
               .from('users')
               .update({
                 subscription_status: 'active',
-                subscription_renewal_date: new Date(sub.current_period_end * 1000).toISOString(),
+                subscription_renewal_date: new Date((sub as any).current_period_end * 1000).toISOString(),
               })
               .eq('id', userId)
           }

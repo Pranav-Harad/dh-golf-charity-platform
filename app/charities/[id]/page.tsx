@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Calendar, ChevronLeft, Target } from 'lucide-react'
 
@@ -19,6 +19,17 @@ export default async function CharityDetailPage({ params }: { params: { id: stri
   }
 
   const events = charity.upcoming_events as { title: string, date: string, description: string }[] || []
+  
+  async function selectCharity() {
+    'use server'
+    const supabaseAction = createClient()
+    const { data: { user } } = await supabaseAction.auth.getUser()
+    if (user) {
+      await supabaseAction.from('users').update({ charity_id: params.id }).eq('id', user.id)
+    }
+    // Redirect must be outside the `if` block or simply thrown to work correctly
+    redirect('/dashboard')
+  }
 
   return (
     <div className="min-h-screen bg-black/95 text-zinc-100 py-12 px-4">
@@ -82,9 +93,11 @@ export default async function CharityDetailPage({ params }: { params: { id: stri
                 <h3 className="text-xl font-semibold text-white mb-1">Support this Charity</h3>
                 <p className="text-zinc-400 text-sm">Select them as your designated beneficiary in your account settings.</p>
               </div>
-              <Link href="/dashboard" className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white font-medium rounded-xl transition-colors whitespace-nowrap">
-                Select in Dashboard
-              </Link>
+              <form action={selectCharity}>
+                <button type="submit" className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white font-medium rounded-xl transition-colors whitespace-nowrap">
+                  Select this Charity
+                </button>
+              </form>
             </div>
           </div>
         </div>
@@ -92,3 +105,4 @@ export default async function CharityDetailPage({ params }: { params: { id: stri
     </div>
   )
 }
+

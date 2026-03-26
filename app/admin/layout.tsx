@@ -39,17 +39,17 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         </div>
         
         <nav className="flex-1 px-4 py-8 space-y-2">
-          <Link href="/admin" className="flex items-center gap-3 px-4 py-3 rounded-lg bg-zinc-800 text-white font-medium">
+          <Link href="/admin" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:text-white hover:bg-zinc-800/50 text-zinc-400 transition cursor-pointer font-medium">
             <LayoutDashboard className="w-5 h-5 text-emerald-400" /> Overview
           </Link>
-          <div className="flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition cursor-pointer">
-            <Users className="w-5 h-5" /> Users
-          </div>
-          <div className="flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition cursor-pointer">
-            <Trophy className="w-5 h-5" /> Draws & Engine
-          </div>
-          <div className="flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition cursor-pointer">
+          <Link href="/admin/winners" className="flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition cursor-pointer">
+            <Trophy className="w-5 h-5" /> Winners & Payouts
+          </Link>
+          <Link href="/admin/charities" className="flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition cursor-pointer">
             <Target className="w-5 h-5" /> Charities
+          </Link>
+          <div className="flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition cursor-pointer">
+            <Users className="w-5 h-5" /> Users (Coming Soon)
           </div>
           <div className="flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition cursor-pointer">
             <Settings className="w-5 h-5" /> Settings

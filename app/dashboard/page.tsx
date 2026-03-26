@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { CheckCircle2, AlertCircle, TrendingUp, Trophy, ArrowRight, Wallet } from 'lucide-react'
 import ScoreEntryForm from '@/components/ScoreEntryForm'
+import ProofUpload from '@/components/ProofUpload'
 import { redirect } from 'next/navigation'
 
 export default async function DashboardPage() {
@@ -99,24 +100,29 @@ export default async function DashboardPage() {
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
             <h3 className="text-lg font-semibold text-white mb-6">Your Charity</h3>
             {myCharity?.charities ? (
-              <div>
-                <div className="flex items-center gap-4 mb-6">
-                  {myCharity.charities.image_url ? (
-                    <img src={myCharity.charities.image_url} alt="Charity" className="w-16 h-16 rounded-lg object-cover bg-zinc-800" />
-                  ) : (
-                    <div className="w-16 h-16 rounded-lg bg-zinc-800 flex items-center justify-center text-zinc-600">Logo</div>
-                  )}
+              (() => {
+                const c = Array.isArray(myCharity.charities) ? myCharity.charities[0] : (myCharity.charities as any);
+                return (
                   <div>
-                    <h4 className="text-white font-medium">{myCharity.charities.name}</h4>
-                    <Link href={`/charities/${myCharity.charity_id}`} className="text-emerald-400 text-xs hover:underline">View Profile</Link>
+                    <div className="flex items-center gap-4 mb-6">
+                      {c?.image_url ? (
+                        <img src={c.image_url} alt="Charity" className="w-16 h-16 rounded-lg object-cover bg-zinc-800" />
+                      ) : (
+                        <div className="w-16 h-16 rounded-lg bg-zinc-800 flex items-center justify-center text-zinc-600">Logo</div>
+                      )}
+                      <div>
+                        <h4 className="text-white font-medium">{c?.name || 'Charity'}</h4>
+                        <Link href={`/charities/${myCharity.charity_id}`} className="text-emerald-400 text-xs hover:underline">View Profile</Link>
+                      </div>
+                    </div>
+                    <div className="bg-black/30 p-4 rounded-lg border border-zinc-800/50">
+                      <div className="text-xs text-zinc-500 mb-1 uppercase tracking-wider">Contribution</div>
+                      <div className="text-2xl font-bold font-mono text-emerald-400">{myCharity.charity_contribution_percent}%</div>
+                      <p className="text-xs text-zinc-400 mt-2">Of your prize winnings will be donated automatically.</p>
+                    </div>
                   </div>
-                </div>
-                <div className="bg-black/30 p-4 rounded-lg border border-zinc-800/50">
-                  <div className="text-xs text-zinc-500 mb-1 uppercase tracking-wider">Contribution</div>
-                  <div className="text-2xl font-bold font-mono text-emerald-400">{myCharity.charity_contribution_percent}%</div>
-                  <p className="text-xs text-zinc-400 mt-2">Of your prize winnings will be donated automatically.</p>
-                </div>
-              </div>
+                )
+              })()
             ) : (
               <div className="text-center py-6">
                 <p className="text-zinc-500 text-sm mb-4">You haven't selected a charity yet.</p>
@@ -146,15 +152,37 @@ export default async function DashboardPage() {
               <div className="space-y-3">
                 <h4 className="text-xs text-zinc-500 uppercase tracking-wider mb-2">Recent Wins</h4>
                 {winnings.slice(0,3).map(win => (
-                  <div key={win.id} className="flex items-center justify-between text-sm bg-black/20 p-3 rounded-lg">
-                    <div>
-                      <span className="text-white font-medium block">{(win.draws as any)?.month || 'Draw'}</span>
-                      <span className="text-xs text-zinc-500 inline-block mt-0.5 px-2 py-0.5 bg-zinc-800 rounded">{win.match_type.replace('_', ' ')}</span>
+                  <div key={win.id} className="flex flex-col gap-3 text-sm bg-black/20 p-3 rounded-lg border border-zinc-800/50">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="text-white font-medium block">{(win.draws as any)?.month || 'Draw'}</span>
+                        <span className="text-xs text-zinc-500 inline-block mt-0.5 px-2 py-0.5 bg-zinc-800 rounded">{win.match_type.replace('_', ' ')}</span>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-emerald-400 font-semibold">${win.prize_amount.toFixed(2)}</div>
+                        <div className={`text-xs capitalize ${win.verification_status === 'pending' ? 'text-yellow-500' : 'text-zinc-500'}`}>
+                          {win.verification_status === 'approved' ? win.payout_status : `${win.verification_status} Review`}
+                        </div>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-emerald-400 font-semibold">${win.prize_amount.toFixed(2)}</div>
-                      <div className="text-xs text-zinc-500 capitalize">{win.payout_status}</div>
-                    </div>
+                    
+                    {win.verification_status === 'pending' && !win.proof_url && (
+                       <div className="pt-2 border-t border-zinc-800/50 flex justify-between items-center">
+                         <span className="text-xs text-zinc-400">Proof required for payout</span>
+                         <ProofUpload winnerId={win.id} userId={user.id} />
+                       </div>
+                    )}
+                    {win.proof_url && win.verification_status === 'pending' && (
+                       <div className="pt-2 border-t border-zinc-800/50">
+                         <span className="text-xs text-yellow-500/80">Proof submitted. Awaiting review.</span>
+                       </div>
+                    )}
+                    {win.verification_status === 'rejected' && (
+                       <div className="pt-2 border-t border-red-500/30 flex justify-between items-center">
+                         <span className="text-xs text-red-400">Proof rejected. Re-upload.</span>
+                         <ProofUpload winnerId={win.id} userId={user.id} />
+                       </div>
+                    )}
                   </div>
                 ))}
               </div>
