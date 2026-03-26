@@ -48,6 +48,6 @@ export async function POST(req: Request) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error('[STRIPE_CHECKOUT]', error)
-    return new NextResponse('Internal Error', { status: 500 })
+    return NextResponse.json({ error: error.message || 'Internal Error' }, { status: 500 })
   }
 }

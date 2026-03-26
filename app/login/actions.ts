@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { getURL } from '@/lib/utils'
 
 export async function login(formData: FormData) {
   const email = formData.get('email') as string
@@ -39,6 +40,7 @@ export async function signup(formData: FormData) {
         ...(charityId && { charity_id: charityId }),
         ...(contributionPercent && { charity_contribution_percent: parseInt(contributionPercent, 10) }),
       },
+      emailRedirectTo: `${getURL()}auth/callback`,
     },
   })
 
