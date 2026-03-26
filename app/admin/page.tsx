@@ -161,9 +161,9 @@ export default async function AdminDashboardPage() {
               <div className="text-center py-12 text-zinc-500">No winners found.</div>
             )}
           </div>
-          <button type="button" className="mt-6 w-full py-3 bg-zinc-800 text-white rounded-xl text-sm font-medium hover:bg-zinc-700 transition">
+          <a href="/admin/winners" className="mt-6 w-full py-3 bg-zinc-800 text-center text-white rounded-xl text-sm font-medium hover:bg-zinc-700 transition">
             View All Winners & Process Payouts
-          </button>
+          </a>
         </div>
 
       </div>
