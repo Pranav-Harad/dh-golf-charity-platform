@@ -125,7 +125,7 @@ export default async function DashboardPage() {
               })()
             ) : (
               <div className="text-center py-6">
-                <p className="text-zinc-500 text-sm mb-4">You haven't selected a charity yet.</p>
+                <p className="text-zinc-500 text-sm mb-4">You haven&apos;t selected a charity yet.</p>
                 <Link href="/charities" className="text-emerald-400 text-sm font-medium hover:underline">Browse Charities</Link>
               </div>
             )}

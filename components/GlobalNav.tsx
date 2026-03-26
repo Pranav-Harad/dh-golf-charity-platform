@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function GlobalNav({ user }: { user: any }) {
   const pathname = usePathname()
 

@@ -90,7 +90,7 @@ export default function ScoreEntryForm({ initialScores = [], onScoreAdded }: Sco
 
       setScores(prev => prev.map(sc => sc.id === id ? { ...sc, score: s, score_date: editDateVal } : sc))
       setEditingId(null)
-    } catch (_err) {
+    } catch {
       alert('Error updating score')
     } finally {
       setLoading(false)

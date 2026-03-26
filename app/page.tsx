@@ -145,7 +145,7 @@ export default function Home() {
           <div className="w-full md:w-1/2">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Real impact, engineered into the core.</h2>
             <p className="text-xl text-zinc-400 mb-8 leading-relaxed">
-              We've built charity directly into the economic model. By mandating a minimum 10% contribution from winnings, we ensure that every game played leaves the world slightly better than before.
+              We&apos;ve built charity directly into the economic model. By mandating a minimum 10% contribution from winnings, we ensure that every game played leaves the world slightly better than before.
             </p>
             <ul className="space-y-4 font-medium text-zinc-300 mb-10">
               <li className="flex items-center gap-3"><Heart className="w-6 h-6 text-emerald-400" /> Transparent Donation Ledgers</li>

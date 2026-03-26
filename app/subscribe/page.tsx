@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Check, Loader2 } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 
 const plans = [
   {
@@ -25,7 +24,6 @@ const plans = [
 
 export default function SubscribePage() {
   const [loadingPriceId, setLoadingPriceId] = useState<string | null>(null)
-  const router = useRouter()
 
   const onSubscribe = async (priceId: string | undefined) => {
     if (!priceId) {
